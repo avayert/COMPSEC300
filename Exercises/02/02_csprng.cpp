@@ -6,12 +6,9 @@
  * NOTE: this program is Linux-specific
  */
 
-#include <iostream>
+#include <algorithm>
 #include <fstream>
-#include <array>
-
-
-constexpr size_t BUFFER_SIZE = 32;
+#include <iostream>
 
 
 int main() {
@@ -32,22 +29,9 @@ int main() {
     size_t n;
     std::cin >> n;
 
-    // read in chunks of N to avoid memory issues
-    std::array<char, BUFFER_SIZE> buffer;
-    size_t read = 0;
-    while (n) {
-        urandom.read(buffer.data(), std::min(n, BUFFER_SIZE));
-        if ((read = urandom.gcount()) == 0) {
-            std::cerr << "Reading from /dev/urandom failed" << std::endl;
-            return 1;
-        }
-
-        out.write(buffer.data(), std::min(n, BUFFER_SIZE));
-        if (out.bad()) {
-            std::cerr << "Writing to output file failed" << std::endl;
-            return 1;
-        }
-
-        n -= read;
-    }
+    std::copy_n(
+        std::istreambuf_iterator<char>(urandom),
+        n,
+        std::ostreambuf_iterator<char>(out)
+    );
 }
