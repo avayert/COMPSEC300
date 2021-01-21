@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
         return -1;
     }
 
-    std::ifstream stream(argv[1]);
+    std::ifstream stream(argv[1], std::ios::binary);
     if (!stream) {
         std::cerr << "Could not open file with name " << argv[1] << std::endl;
         return 1;
@@ -23,13 +23,7 @@ int main(int argc, char** argv) {
 
     // read and print in chunks to avoid issues with OOMing
     std::array<char, BUFFER_SIZE> buffer;
-    while (!stream.eof()) {
-        stream.read(buffer.data(), BUFFER_SIZE);
-        if (stream.bad()) {
-            std::cerr << "Reading from " << argv[1] << " failed.";
-            return 1;
-        }
-
+    while (stream.read(buffer.data(), BUFFER_SIZE)) {
         std::copy_if(
             std::begin(buffer),
             std::end(buffer),
