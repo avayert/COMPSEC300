@@ -34,7 +34,6 @@ while True:
         print('Invalid input. Please enter two decimal numbers with a space as the delimiter.')
         continue
 
-    #
     # we also manually loop instead of using any() to tell the user
     # which number failed.
     for val in (a, b):
